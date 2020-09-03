@@ -1,0 +1,20 @@
+- name: collect facts about container
+  setup:
+  ignore_errors: false
+  retries: 3
+
+- name: Install common packages
+  apt:
+    pkg:
+      - redis
+
+- name: Copy config files
+  copy: src={{ item.src }} dest={{ item.dst }} owner={{ item.owner }} group={{ item.group }}
+  with_items:
+    - { src: '{{ role_path }}/files/', dst: '/', owner: 'root', group: 'root' }
+
+- name: Change redis configuration file ownership
+  file: path=/etc/redis/redis.conf owner=redis group=redis
+
+- name: Restart redis service
+  service: name=redis enabled=yes state=restarted

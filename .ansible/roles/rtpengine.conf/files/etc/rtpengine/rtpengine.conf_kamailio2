@@ -1,0 +1,20 @@
+[rtpengine]
+table=-1
+# interface=interface=pub2/-MY_IP_ADDR-;pub1/-REMOTE_NODE-
+interface=192.168.51.10
+redis=192.168.51.100:6379/2
+subscribe-keyspace=1
+log-stderr=true
+
+log-level=3
+delete-delay=0
+
+listen-ng=127.0.0.1:2223
+listen-cli=9900
+
+timeout = 60
+silent-timeout = 3600
+tos = 184
+
+port-min = 10000
+port-max = 20000

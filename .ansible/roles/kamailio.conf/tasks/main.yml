@@ -1,0 +1,61 @@
+- name: Add an Apt signing key
+  apt_key:
+    id: E79ACECB87D8DCD23A20AD2FFB40D3E6508EA4C8
+    url: https://deb.kamailio.org/kamailiodebkey.gpg
+    state: present
+
+- apt_repository:
+    repo: deb http://deb.kamailio.org/kamailio54 buster main
+    state: present
+    filename: kamailio
+
+- name: Install packages
+  apt:
+    pkg:
+      - sngrep
+      - sipsak
+      - kamailio
+
+- name: Set kamailio system settings
+  ini_file: path=/etc/sysconfig/kamailio section= option={{item.option}} value={{item.value}} mode=0644
+  with_items:
+    - { option: SHM_MEMORY, value: 128 }
+    - { option: PKG_MEMORY, value: 8 }
+
+- name: Backup kamailio configuration before copy new
+  ignore_errors: yes
+  archive:
+    path: /etc/kamailio
+    dest: /etc/kamailio.{{ansible_date_time.epoch}}.tgz
+    remove: yes
+
+- name: Copy config files
+  copy: src={{ item.src }} dest={{ item.dst }} owner={{ item.owner }} group={{ item.group }}
+  with_items:
+    - { src: '{{ role_path }}/files/', dst: '/', owner: 'root', group: 'root' }
+
+- name: Set kamailio local ip
+  replace:
+    path: /etc/kamailio/kamailio-local.cfg
+    regexp: '-MY_IP_ADDR-'
+    replace: '{{ansible_eth1.ipv4.address}}'
+
+- name: Set kamailio remote node
+  replace:
+    path: /etc/kamailio/kamailio-local.cfg
+    regexp: '-REMOTE_NODE-'
+    replace: '{{remote_node}}'
+
+- name: Allow kamailio to bind to non-existing ip address
+  sysctl:
+    name: net.ipv4.ip_nonlocal_bind
+    value: '1'
+    sysctl_set: yes
+    state: present
+    reload: yes
+
+- name: Restart rsyslogd service
+  service: name=rsyslog enabled=yes state=restarted
+
+- name: Enable kamailio service
+  service: name=kamailio enabled=yes state=restarted

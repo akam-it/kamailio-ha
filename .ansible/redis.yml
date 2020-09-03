@@ -1,0 +1,8 @@
+- name: Redis
+  remote_user: root
+  hosts: all
+  gather_facts: true
+  become: yes
+  roles:
+    - { role: os.common, tags: common }
+    - { role: redis.conf, tags: redis }

@@ -1,0 +1,27 @@
+- name: Install packages
+  apt:
+    pkg:
+      - keepalived
+
+- name: Copy config files
+  copy: src={{ item.src }} dest={{ item.dst }} owner={{ item.owner }} group={{ item.group }}
+  with_items:
+    - { src: '{{ role_path }}/files/', dst: '/', owner: 'root', group: 'root' }
+
+- name: Setup keepalived config
+  replace:
+    path: /etc/keepalived/keepalived.conf
+    regexp: '-HOSTNAME-'
+    replace: '{{inventory_hostname}}'
+
+- name: Setup keepalived role
+  replace:
+    path: /etc/keepalived/keepalived.conf
+    regexp: '-HOSTROLE-'
+    replace: '{{hostrole}}'
+
+- name: Restart rsyslogd service
+  service: name=rsyslog enabled=yes state=restarted
+
+- name: Enable keepalived service
+  service: name=keepalived enabled=yes state=restarted

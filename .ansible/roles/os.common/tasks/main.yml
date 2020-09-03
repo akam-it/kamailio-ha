@@ -1,0 +1,27 @@
+- name: collect facts about container
+  setup:
+  ignore_errors: false
+  retries: 3
+
+- name: Install common packages
+  apt:
+    pkg:
+      - mc
+      - gnupg2
+      - git
+      - mtr
+      - htop
+      - screen
+      - tcpdump
+      - net-tools
+
+- name: Set timezone to UTC
+  timezone: name=UTC
+
+- name: Copy config files
+  copy: src={{ item.src }} dest={{ item.dst }} owner={{ item.owner }} group={{ item.group }}
+  with_items:
+    - { src: '{{ role_path }}/files/', dst: '/', owner: 'root', group: 'root' }
+
+- name: Restart rsyslogd service
+  service: name=rsyslog enabled=yes state=restarted
