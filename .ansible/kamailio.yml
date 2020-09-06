@@ -4,7 +4,7 @@
   gather_facts: true
   become: yes
   roles:
-#    - { role: os.common, tags: common }
-#    - { role: rtpengine.conf, tags: rtpengine }
+    - { role: os.common, tags: common }
+    - { role: rtpengine.conf, tags: rtpengine }
     - { role: kamailio.conf, tags: kamailio }
-#    - { role: keepalived.conf, tags: keepalived }
+    - { role: keepalived.conf, tags: keepalived }
