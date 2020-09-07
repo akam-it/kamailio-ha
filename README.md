@@ -20,12 +20,12 @@ $ vagrant up
 After virtual machines are deployed vagrant will start provisioning described in the folder .ansilbe
 
 # Installed machines
-192.168.51.10 - Virtual IP address that belong to MAIN kamailio+rtpengine node
-192.168.51.11 - kamailio1
-192.168.51.12 - kamailio2
-192.168.51.21 - asterisk1
-192.168.51.22 - asterisk2
-192.168.51.100 - redis database
+- 192.168.51.10 - Virtual IP address that belong to MAIN kamailio+rtpengine node
+- 192.168.51.11 - kamailio1
+- 192.168.51.12 - kamailio2
+- 192.168.51.21 - asterisk1
+- 192.168.51.22 - asterisk2
+- 192.168.51.100 - redis database
 
 # Make a call
 - Register your softphone(s) on 192.168.51.10, you can use 2XX number and any password.
