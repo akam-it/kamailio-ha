@@ -1,0 +1,21 @@
+*filter
+:INPUT DROP [0:0]
+:FORWARD DROP [0:0]
+:OUTPUT ACCEPT [0:0]
+
+# Accept traffic from loopback interface.
+-A INPUT -i lo -j ACCEPT
+
+# Allow icmp ping
+-A INPUT -p icmp --icmp-type 8 -m state --state NEW -j ACCEPT
+# Allow established connections:
+-A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+
+# Allow ssh
+-A INPUT -p tcp --dport 22 -j ACCEPT
+
+# Allow sip and rtp from sip.kamailio.site
+-A INPUT -p udp -s 46.101.118.116 -m multiport --dports 5060,10000:20000 -j ACCEPT
+
+
+COMMIT

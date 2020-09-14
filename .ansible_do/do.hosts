@@ -1,0 +1,8 @@
+[kamailio]
+sip.kamailio.site
+
+[asterisk]
+#asterisk1.kamailio.site
+#asterisk2.kamailio.site
+139.59.131.55
+164.90.215.60

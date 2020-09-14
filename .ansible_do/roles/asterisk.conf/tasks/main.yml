@@ -1,0 +1,25 @@
+- name: Install packages
+  apt:
+    pkg:
+      - asterisk
+      - asterisk-core-sounds-ru-wav
+      - sngrep
+      - iptables-persistent
+
+- name: Backup asterisk configuration before copy new
+  ignore_errors: yes
+  archive:
+    path: /etc/asterisk
+    dest: /etc/asterisk.{{ansible_date_time.epoch}}.tgz
+    remove: yes
+
+- name: Copy config files
+  copy: src={{ item.src }} dest={{ item.dst }} owner={{ item.owner }} group={{ item.group }}
+  with_items:
+    - { src: '{{ role_path }}/files/', dst: '/', owner: 'root', group: 'root' }
+
+- name: Enable asterisk service
+  service: name=asterisk enabled=yes state=restarted
+
+- name: Enable firewall service
+  service: name=netfilter-persistent enabled=yes state=restarted

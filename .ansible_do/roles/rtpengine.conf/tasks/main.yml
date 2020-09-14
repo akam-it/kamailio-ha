@@ -1,0 +1,27 @@
+- name: Copy files
+  copy: src={{ item.src }} dest={{ item.dst }} owner={{ item.owner }} group={{ item.group }}
+  with_items:
+    - { src: '{{ role_path }}/files/', dst: '/', owner: 'root', group: 'root' }
+
+- stat:
+    path: /usr/sbin/rtpengine
+  register: rtpengine_installed
+
+-  apt:
+     deb: /pkg/ngcp-rtpengine-daemon_8.5.1.2+0~mr8.5.1.2_amd64.deb
+   when: rtpengine_installed.stat.islnk is not defined
+-  apt:
+     deb: /pkg/ngcp-rtpengine-utils_8.5.1.2+0~mr8.5.1.2_all.deb
+   when: rtpengine_installed.stat.islnk is not defined
+
+- name: Setup rtpengine config
+  replace:
+    path: /etc/rtpengine/rtpengine.conf
+    regexp: '-MY_IP_ADDR-'
+    replace: '{{ansible_eth0.ipv4.address}}'
+
+- name: Restart rsyslogd service
+  service: name=rsyslog enabled=yes state=restarted
+
+- name: Enable and start rtpengine service
+  service: name=ngcp-rtpengine-daemon enabled=yes state=restarted

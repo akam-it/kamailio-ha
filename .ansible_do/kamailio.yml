@@ -1,0 +1,9 @@
+- name: Kamailio
+  remote_user: root
+  hosts: kamailio
+  gather_facts: true
+  become: yes
+  roles:
+    - { role: os.common, tags: common }
+    - { role: rtpengine.conf, tags: rtpengine }
+    - { role: kamailio.conf, tags: kamailio }

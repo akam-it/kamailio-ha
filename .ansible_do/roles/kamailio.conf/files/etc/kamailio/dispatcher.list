@@ -1,0 +1,3 @@
+# (rus-kamailio-conf)
+1 sip:asterisk1.kamailio.site:5060 16 0
+1 sip:asterisk2.kamailio.site:5060 16 0
