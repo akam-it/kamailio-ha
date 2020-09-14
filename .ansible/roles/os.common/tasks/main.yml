@@ -13,6 +13,7 @@
       - htop
       - screen
       - tcpdump
+      - xz-utils
       - net-tools
 
 - name: Set timezone to UTC

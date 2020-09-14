@@ -9,10 +9,10 @@
 
 -  apt:
      deb: /pkg/ngcp-rtpengine-daemon_8.5.1.2+0~mr8.5.1.2_amd64.deb
-   when: rtpengine_installed.stat.islnk is defined
+   when: rtpengine_installed.stat.islnk is not defined
 -  apt:
      deb: /pkg/ngcp-rtpengine-utils_8.5.1.2+0~mr8.5.1.2_all.deb
-   when: rtpengine_installed.stat.islnk is defined
+   when: rtpengine_installed.stat.islnk is not defined
 
 - name: Create a symbolic link to rtpengine config
   file: src=/etc/rtpengine/rtpengine.conf_{{inventory_hostname}} dest=/etc/rtpengine/rtpengine.conf state=link
