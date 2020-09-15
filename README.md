@@ -39,3 +39,20 @@ $ rtpengine-ctl list sessions all
 ```
 
 Kill kamailio application on main node  or pause virtual machhine 'kamailio1' and see how active calls, after little pause of 3 seconds, migrate to kamailio2. New calls will be handled by kamailio2 node.
+
+# Hightlights
+Subscripbsions and events should be enabled for Redis:
+
+redis.conf
+```
+notify-keyspace-events "KEA"
+```
+
+
+Kamalio and rtpengine should be allowed to bind to nonlocal IP
+```sh
+# echo net.ipv4.ip_nonlocal_bind=1 >> /etc/sysctl.conf
+# sysctl -p
+```
+
+
