@@ -6,6 +6,8 @@ redis=192.168.51.100:6379/1
 subscribe-keyspace=2
 log-stderr=true
 
+no-redis-required=true
+
 log-level=3
 delete-delay=0
 
